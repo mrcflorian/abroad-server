@@ -1,0 +1,14 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                           controllers.Application.index
+
+# RESTful API
+
+GET     /newsfeed/:userID                           controllers.AbroadAPIController.newsFeed(userID: String)
+GET     /user/update/email/:email/firstname/:firstName/facebook_id/:facebookID  controllers.AbroadAPIController.updateUser(email: String, firstName: String, facebookID: String)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
