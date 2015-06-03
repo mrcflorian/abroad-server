@@ -7,7 +7,9 @@ GET     /                           controllers.Application.index
 
 # RESTful API
 
-GET     /newsfeed/:userID                           controllers.AbroadAPIController.newsFeed(userID: String)
+GET     /newsfeed/user_id/:userID                           controllers.AbroadAPIController.newsFeed(userID: String, skip: Long = 0)
+GET     /newsfeed/skip/:skip/user_id/:userID                           controllers.AbroadAPIController.newsFeed(userID: String, skip: Long)
+GET     /newsfeed/user_id/:userID/skip/:skip                           controllers.AbroadAPIController.newsFeed(userID: String, skip: Long)
 GET     /user/update/email/:email/firstname/:firstName/facebook_id/:facebookID  controllers.AbroadAPIController.updateUser(email: String, firstName: String, facebookID: String)
 
 # Map static resources from the /public folder to the /assets URL path

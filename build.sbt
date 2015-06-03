@@ -1,4 +1,4 @@
-name := """abroad-server2"""
+name := """abroad-server"""
 
 version := "1.0-SNAPSHOT"
 
