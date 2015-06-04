@@ -29,6 +29,12 @@ object AbroadDatabaseController {
     AbroadDatabaseController.getUser(email)
   }
 
+  def addStatus(userID: Long, status: String): Boolean = {
+    val decodedStatus = URLDecoder.decode(status.replace("+", "%2B"), "UTF-8").replace("%2B", "+")
+    val timestamp = System.currentTimeMillis.toString
+    runUpdateQuery("insert into statuses values(null, " + userID.toString + ", '" + decodedStatus + "', '" + timestamp + "', '0', '0')")
+  }
+
   def runSelectUserQuery(query: String): List[(String, String)] =
     DB.withConnection { implicit c =>
       SQL(query)().map(row =>
@@ -43,11 +49,37 @@ object AbroadDatabaseController {
 
   def getNewsFeed(user_id: String, skip: Long): List[(AbroadStatus)] =
     DB.withConnection { implicit c =>
-      SQL("select * from statuses")().map(row => AbroadStatus(
+      SQL("select * from statuses order by created_at desc limit " + skip.toString + ", 50")().map(row => AbroadStatus(
         row[Long]("status_id"),
         row[Long]("user_id"),
         row[String]("status"),
         row[String]("created_at"),
+        row[String]("latitude"),
+        row[String]("longitude")
+      )
+      ).toList
+    }
+
+  def getNewsFeedTop(userID: Long, topID: Long): List[(AbroadStatus)] =
+    DB.withConnection { implicit c =>
+      SQL("select * from statuses order by rand()")().map(row => AbroadStatus(
+        row[Long]("status_id"),
+        row[Long]("user_id"),
+        row[String]("status"),
+        row[String]("created_at"),
+        row[String]("latitude"),
+        row[String]("longitude")
+      )
+      ).toList
+    }
+
+  def getMessagingUsers(userID: Long, skip: Long): List[(AbroadUser)] =
+    DB.withConnection { implicit c =>
+      SQL("select * from users limit " + skip.toString + ", 50")().map(row => AbroadUser(
+        row[Long]("user_id"),
+        row[String]("email"),
+        row[String]("firstname"),
+        row[String]("profile_picture"),
         row[String]("latitude"),
         row[String]("longitude")
       )

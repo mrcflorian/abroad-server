@@ -10,7 +10,13 @@ GET     /                           controllers.Application.index
 GET     /newsfeed/user_id/:userID                           controllers.AbroadAPIController.newsFeed(userID: String, skip: Long = 0)
 GET     /newsfeed/skip/:skip/user_id/:userID                           controllers.AbroadAPIController.newsFeed(userID: String, skip: Long)
 GET     /newsfeed/user_id/:userID/skip/:skip                           controllers.AbroadAPIController.newsFeed(userID: String, skip: Long)
+GET     /newsfeed/user_id/:userID/top_id/                           controllers.AbroadAPIController.newsFeedTop(userID: Long, topID: Long = 0)
+GET     /newsfeed/user_id/:userID/top_id                           controllers.AbroadAPIController.newsFeedTop(userID: Long, topID: Long = 0)
+GET     /newsfeed/user_id/:userID/top_id/:topID                           controllers.AbroadAPIController.newsFeedTop(userID: Long, topID: Long)
 GET     /user/update/email/:email/firstname/:firstName/facebook_id/:facebookID  controllers.AbroadAPIController.updateUser(email: String, firstName: String, facebookID: String)
+GET     /addStatus/user_id/:userID/status/:status                          controllers.AbroadAPIController.addStatus(userID: Long, status: String)
+GET     /users/messagingUsers/skip/:skip/user_id/:userID                          controllers.AbroadAPIController.messagingUsers(userID: Long, skip: Long)
+
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

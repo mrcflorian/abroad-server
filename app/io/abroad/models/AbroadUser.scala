@@ -46,14 +46,14 @@ object AbroadUser {
 
   implicit object UserFormat extends Format[AbroadUser] {
     // convert from Tweet object to JSON (serializing to JSON)
-    def writes(status: AbroadUser): JsValue = {
+    def writes(user: AbroadUser): JsValue = {
       val statusSeq = Seq(
-        "user_id" -> JsString(status.userID.toString),
-        "email" -> JsString(status.email),
-        "fist_name" -> JsString(status.firstName),
-        "latitude" -> JsString(status.latitude),
-        "longitude" -> JsString(status.longitude),
-        "profile_picture" -> JsString("http://img.youtube.com/vi/W9ZEnhLY7tk/0.jpg")
+        "user_id" -> JsString(user.userID.toString),
+        "email" -> JsString(user.email),
+        "firstname" -> JsString(user.firstName),
+        "latitude" -> JsString(user.latitude),
+        "longitude" -> JsString(user.longitude),
+        "profile_picture" -> JsString(user.profilePicture)
       )
       JsObject(statusSeq)
     }
