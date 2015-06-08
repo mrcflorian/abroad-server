@@ -124,4 +124,11 @@ object AbroadDatabaseController {
       )
       ).toList
     }
+
+
+  def addComment(userID: Long, statusID: Long, comment: String): Boolean = {
+    val decodedComment = URLDecoder.decode(comment.replace("+", "%2B"), "UTF-8").replace("%2B", "+")
+    val timestamp = System.currentTimeMillis.toString
+    runUpdateQuery("insert into comments values(null, " + userID.toString + ", " + statusID.toString + ", '" + decodedComment + "', '" + timestamp + "')")
+  }
 }

@@ -43,4 +43,9 @@ class AbroadAPIController extends Controller {
     val statuses = AbroadDatabaseController.profileTop(userID, topID)
     Ok(views.html.jsonResponse(Json.stringify(Json.toJson(statuses))))
   }
+
+  def addComment(userID: Long, statusID: Long, comment: String) = Action {
+    val response = AbroadDatabaseController.addComment(userID, statusID, comment)
+    Ok(views.html.jsonResponse(Json.stringify(Json.toJson(response))))
+  }
 }
