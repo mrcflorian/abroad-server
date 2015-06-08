@@ -3,7 +3,7 @@ package controllers
 import anorm._
 import java.net.URLDecoder
 
-import io.abroad.models.{AbroadUser, AbroadStatus}
+import io.abroad.models.{AbroadComment, AbroadUser, AbroadStatus}
 import play.api.db._
 import play.api.Play.current
 
@@ -131,4 +131,16 @@ object AbroadDatabaseController {
     val timestamp = System.currentTimeMillis.toString
     runUpdateQuery("insert into comments values(null, " + userID.toString + ", " + statusID.toString + ", '" + decodedComment + "', '" + timestamp + "')")
   }
+
+  def comments(statusID: Long, skip: Long): List[(AbroadComment)] =
+    DB.withConnection { implicit c =>
+      SQL("select * from comments where status_id='" + statusID.toString + "' order by created_at asc limit " + skip.toString + ", 50")().map(row => AbroadComment(
+        row[Long]("comment_id"),
+        row[Long]("user_id"),
+        row[Long]("status_id"),
+        row[String]("text"),
+        row[String]("created_at")
+      )
+      ).toList
+    }
 }
