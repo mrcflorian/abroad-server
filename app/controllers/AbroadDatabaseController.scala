@@ -98,4 +98,30 @@ object AbroadDatabaseController {
       )
       ).toList(0)
     }
+
+  def profile(userID: Long, skip: Long): List[(AbroadStatus)] =
+    DB.withConnection { implicit c =>
+      SQL("select * from statuses where user_id='" + userID.toString + "' order by created_at desc limit " + skip.toString + ", 50")().map(row => AbroadStatus(
+        row[Long]("status_id"),
+        row[Long]("user_id"),
+        row[String]("status"),
+        row[String]("created_at"),
+        row[String]("latitude"),
+        row[String]("longitude")
+      )
+      ).toList
+    }
+
+  def profileTop(userID: Long, topID: Long): List[(AbroadStatus)] =
+    DB.withConnection { implicit c =>
+      SQL("select * from statuses where user_id='" + userID.toString + "' order by rand()")().map(row => AbroadStatus(
+        row[Long]("status_id"),
+        row[Long]("user_id"),
+        row[String]("status"),
+        row[String]("created_at"),
+        row[String]("latitude"),
+        row[String]("longitude")
+      )
+      ).toList
+    }
 }
