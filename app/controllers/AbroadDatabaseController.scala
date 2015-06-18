@@ -49,26 +49,28 @@ object AbroadDatabaseController {
 
   def getNewsFeed(user_id: String, skip: Long): List[(AbroadStatus)] =
     DB.withConnection { implicit c =>
-      SQL("select * from statuses order by created_at desc limit " + skip.toString + ", 50")().map(row => AbroadStatus(
+      SQL("select statuses.*, users.profile_picture from statuses,users where statuses.user_id=users.user_id order by statuses.created_at desc limit " + skip.toString + ", 50")().map(row => AbroadStatus(
         row[Long]("status_id"),
         row[Long]("user_id"),
         row[String]("status"),
         row[String]("created_at"),
         row[String]("latitude"),
-        row[String]("longitude")
+        row[String]("longitude"),
+        row[String]("profile_picture")
       )
       ).toList
     }
 
   def getNewsFeedTop(userID: Long, topID: Long): List[(AbroadStatus)] =
     DB.withConnection { implicit c =>
-      SQL("select * from statuses order by rand()")().map(row => AbroadStatus(
+      SQL("select statuses.*, users.profile_picture from statuses, users where statuses.user_id=users.user_id and status_id > " + topID.toString + " order by created_at desc")().map(row => AbroadStatus(
         row[Long]("status_id"),
         row[Long]("user_id"),
         row[String]("status"),
         row[String]("created_at"),
         row[String]("latitude"),
-        row[String]("longitude")
+        row[String]("longitude"),
+        row[String]("profile_picture")
       )
       ).toList
     }
@@ -101,30 +103,31 @@ object AbroadDatabaseController {
 
   def profile(userID: Long, skip: Long): List[(AbroadStatus)] =
     DB.withConnection { implicit c =>
-      SQL("select * from statuses where user_id='" + userID.toString + "' order by created_at desc limit " + skip.toString + ", 50")().map(row => AbroadStatus(
+      SQL("select statuses.*, users.profile_picture from statuses,users where statuses.user_id=users.user_id and statuses.user_id='" + userID.toString + "' order by created_at desc limit " + skip.toString + ", 50")().map(row => AbroadStatus(
         row[Long]("status_id"),
         row[Long]("user_id"),
         row[String]("status"),
         row[String]("created_at"),
         row[String]("latitude"),
-        row[String]("longitude")
+        row[String]("longitude"),
+        row[String]("profile_picture")
       )
       ).toList
     }
 
   def profileTop(userID: Long, topID: Long): List[(AbroadStatus)] =
     DB.withConnection { implicit c =>
-      SQL("select * from statuses where user_id='" + userID.toString + "' order by rand()")().map(row => AbroadStatus(
+      SQL("select statuses.*, users.profile_picture from statuses,users where statuses.user_id=users.user_id and statuses.user_id='" + userID.toString + "' and status_id > " + topID.toString + " order by created_at DESC")().map(row => AbroadStatus(
         row[Long]("status_id"),
         row[Long]("user_id"),
         row[String]("status"),
         row[String]("created_at"),
         row[String]("latitude"),
-        row[String]("longitude")
+        row[String]("longitude"),
+        row[String]("profile_picture")
       )
       ).toList
     }
-
 
   def addComment(userID: Long, statusID: Long, comment: String): Boolean = {
     val decodedComment = URLDecoder.decode(comment.replace("+", "%2B"), "UTF-8").replace("%2B", "+")
@@ -134,12 +137,13 @@ object AbroadDatabaseController {
 
   def comments(statusID: Long, skip: Long): List[(AbroadComment)] =
     DB.withConnection { implicit c =>
-      SQL("select * from comments where status_id='" + statusID.toString + "' order by created_at asc limit " + skip.toString + ", 50")().map(row => AbroadComment(
+      SQL("select comments.*, users.profile_picture from comments, users where comments.user_id=users.user_id and status_id='" + statusID.toString + "' order by created_at asc limit " + skip.toString + ", 50")().map(row => AbroadComment(
         row[Long]("comment_id"),
         row[Long]("user_id"),
         row[Long]("status_id"),
         row[String]("text"),
-        row[String]("created_at")
+        row[String]("created_at"),
+        row[String]("profile_picture")
       )
       ).toList
     }

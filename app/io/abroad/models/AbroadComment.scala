@@ -6,7 +6,7 @@ import play.api.libs.json._
  * Created by Florian on 6/8/15.
  */
 
-case class AbroadComment(commentID: Long, statusID: Long, userID: Long, text: String, createAt: String)
+case class AbroadComment(commentID: Long, statusID: Long, userID: Long, text: String, createAt: String, profilePicture: String)
 
 object AbroadComment {
 
@@ -18,13 +18,14 @@ object AbroadComment {
         "user_id" -> JsString(comment.userID.toString),
         "status_id" -> JsString(comment.statusID.toString),
         "text" -> JsString(comment.text),
-        "created_at" -> JsString(comment.createAt)
+        "created_at" -> JsString(comment.createAt),
+        "profile_picture" -> JsString(comment.profilePicture)
       )
       JsObject(statusSeq)
     }
     // convert from JSON string to a Status object (de-serializing from JSON)
     def reads(json: JsValue): JsResult[AbroadComment] = {
-      JsSuccess(AbroadComment(0, 0, 0, "", ""))
+      JsSuccess(AbroadComment(0, 0, 0, "", "", ""))
     }
   }
 }

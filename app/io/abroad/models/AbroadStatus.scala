@@ -6,7 +6,7 @@ import play.api.libs.json._
  * Created by Florian on 6/3/15.
  */
 
-case class AbroadStatus(statusID: Long, userID: Long, status: String, createAt: String, latitude: String, longitude: String)
+case class AbroadStatus(statusID: Long, userID: Long, status: String, createAt: String, latitude: String, longitude: String, imageURL: String)
 
 object AbroadStatus {
 
@@ -20,13 +20,13 @@ object AbroadStatus {
         "created_at" -> JsString(status.createAt),
         "latitude" -> JsString(status.latitude),
         "longitude" -> JsString(status.longitude),
-        "image_url" -> JsString("http://img.youtube.com/vi/W9ZEnhLY7tk/0.jpg")
+        "image_url" -> JsString(status.imageURL)
       )
       JsObject(statusSeq)
     }
     // convert from JSON string to a Status object (de-serializing from JSON)
     def reads(json: JsValue): JsResult[AbroadStatus] = {
-      JsSuccess(AbroadStatus(0, 0, "", "", "", ""))
+      JsSuccess(AbroadStatus(0, 0, "", "", "", "", ""))
     }
   }
 }
